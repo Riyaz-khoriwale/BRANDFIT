@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Admin - BRAND FIT FASHION STORE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #212529;
+        }
+        
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #495057;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #495057;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-right: 0.5rem;
+        }
+        
+        button:hover {
+            background: #0056b3;
+        }
+        
+        button.secondary {
+            background: #6c757d;
+        }
+        
+        button.secondary:hover {
+            background: #545b62;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 4px;
+            border: 1px solid #c3e6cb;
+            margin-bottom: 1rem;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 1rem;
+            border-radius: 4px;
+            border: 1px solid #f5c6cb;
+            margin-bottom: 1rem;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #212529;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: #6c757d;
+            margin-top: 0.5rem;
+        }
+        
+        .nav {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .nav a {
+            color: #007bff;
+            text-decoration: none;
+            margin-right: 1rem;
+            font-weight: 500;
+        }
+        
+        .nav a:hover {
+            text-decoration: underline;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: normal;
+        }
+        
+        .category-list {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 4px;
+            border: 1px solid #dee2e6;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .category-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 4px;
+            border: 1px solid #dee2e6;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .category-name {
+            font-weight: 600;
+        }
+        
+        .category-slug {
+            font-size: 0.875rem;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+            <a href="#" onclick="showDashboard(); return false;">📊 Dashboard</a>
+            <a href="#" onclick="showCategories(); return false;">📁 Categories</a>
+            <a href="#" onclick="showProducts(); return false;">📦 Add Product</a>
+            <a href="http://127.0.0.1:3000" target="_blank">👁️ View Store</a>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboard">
+            <div class="card">
+                <h1>Admin Dashboard</h1>
+                <p>Manage your BRAND FIT FASHION STORE</p>
+                
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalProducts">0</div>
+                        <div class="stat-label">Total Products</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalCategories">0</div>
+                        <div class="stat-label">Categories</div>
+                    </div>
+                </div>
+                
+                <h2>Quick Actions</h2>
+                <p>Get started by adding categories and products to your store.</p>
+                <br>
+                <button onclick="showCategories()">📁 Manage Categories</button>
+                <button onclick="showProducts()">📦 Add Product</button>
+            </div>
+        </div>
+
+        <!-- Categories -->
+        <div id="categories" class="hidden">
+            <div class="card">
+                <h1>Manage Categories</h1>
+                <p>Add and manage product categories</p>
+                
+                <div id="categoryMessage"></div>
+                
+                <div class="grid">
+                    <div>
+                        <h2>Add New Category</h2>
+                        <form id="categoryForm">
+                            <div class="form-group">
+                                <label for="categoryName">Category Name *</label>
+                                <input type="text" id="categoryName" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="categoryDescription">Description</label>
+                                <textarea id="categoryDescription"></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="categoryImage">Image URL</label>
+                                <input type="url" id="categoryImage">
+                            </div>
+                            
+                            <button type="submit">Add Category</button>
+                        </form>
+                    </div>
+                    
+                    <div>
+                        <h2>Existing Categories</h2>
+                        <div id="categoryList" class="category-list">
+                            <p style="text-align: center; color: #6c757d;">Loading categories...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products -->
+        <div id="products" class="hidden">
+            <div class="card">
+                <h1>Add New Product</h1>
+                <p>Add a new product to your store</p>
+                
+                <div id="productMessage"></div>
+                
+                <form id="productForm">
+                    <div class="grid">
+                        <div>
+                            <h2>Basic Information</h2>
+                            
+                            <div class="form-group">
+                                <label for="productName">Product Name *</label>
+                                <input type="text" id="productName" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="productSKU">SKU *</label>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <input type="text" id="productSKU" required style="flex: 1;">
+                                    <button type="button" onclick="generateSKU()">Generate</button>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="productPrice">Price (₹) *</label>
+                                <input type="number" id="productPrice" step="0.01" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="productStock">Stock Quantity</label>
+                                <input type="number" id="productStock" value="0">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="productCategory">Category *</label>
+                                <select id="productCategory" required>
+                                    <option value="">Select a category</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h2>Additional Details</h2>
+                            
+                            <div class="form-group">
+                                <label for="productDescription">Description</label>
+                                <textarea id="productDescription" rows="4"></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="productImage">Product Image URL</label>
+                                <input type="url" id="productImage" placeholder="https://example.com/image.jpg">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="productSizes">Size Options (comma separated)</label>
+                                <input type="text" id="productSizes" placeholder="S, M, L, XL">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="productColors">Color Options (comma separated)</label>
+                                <input type="text" id="productColors" placeholder="Black, White, Blue">
+                            </div>
+                            
+                            <div class="checkbox-group">
+                                <label>
+                                    <input type="checkbox" id="productFeatured">
+                                    Featured Product
+                                </label>
+                                <label>
+                                    <input type="checkbox" id="productNewArrival">
+                                    New Arrival
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 2rem;">
+                        <button type="submit">Add Product</button>
+                        <button type="button" class="secondary" onclick="showDashboard()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let categories = [];
+        
+        // Show/hide sections
+        function showDashboard() {
+            hideAllSections();
+            document.getElementById('dashboard').classList.remove('hidden');
+            loadStats();
+        }
+        
+        function showCategories() {
+            hideAllSections();
+            document.getElementById('categories').classList.remove('hidden');
+            loadCategories();
+        }
+        
+        function showProducts() {
+            hideAllSections();
+            document.getElementById('products').classList.remove('hidden');
+            loadCategoriesForSelect();
+        }
+        
+        function hideAllSections() {
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('categories').classList.add('hidden');
+            document.getElementById('products').classList.add('hidden');
+        }
+        
+        // Load data
+        async function loadStats() {
+            try {
+                const response = await fetch('http://127.0.0.1:3000/api/categories');
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('totalCategories').textContent = data.length;
+                }
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+        
+        async function loadCategories() {
+            try {
+                const response = await fetch('http://127.0.0.1:3000/api/categories');
+                if (response.ok) {
+                    categories = await response.json();
+                    displayCategories();
+                }
+            } catch (error) {
+                console.error('Error loading categories:', error);
+                document.getElementById('categoryList').innerHTML = '<p style="color: red;">Error loading categories</p>';
+            }
+        }
+        
+        function displayCategories() {
+            const listContainer = document.getElementById('categoryList');
+            
+            if (categories.length === 0) {
+                listContainer.innerHTML = '<p style="text-align: center; color: #6c757d;">No categories found. Add your first category above.</p>';
+                return;
+            }
+            
+            listContainer.innerHTML = categories.map(cat => `
+                <div class="category-item">
+                    <div>
+                        <div class="category-name">${cat.name}</div>
+                        <div class="category-slug">${cat.slug}</div>
+                        ${cat.description ? `<div style="font-size: 0.875rem; margin-top: 0.25rem;">${cat.description}</div>` : ''}
+                    </div>
+                    <button onclick="deleteCategory('${cat.id}')" style="background: #dc3545; color: white; border: none; padding: 0.5rem; border-radius: 4px; cursor: pointer;">Delete</button>
+                </div>
+            `).join('');
+        }
+        
+        async function loadCategoriesForSelect() {
+            try {
+                const response = await fetch('http://127.0.0.1:3000/api/categories');
+                if (response.ok) {
+                    categories = await response.json();
+                    const select = document.getElementById('productCategory');
+                    select.innerHTML = '<option value="">Select a category</option>' + 
+                        categories.map(cat => `<option value="${cat.id}">${cat.name}</option>`).join('');
+                }
+            } catch (error) {
+                console.error('Error loading categories:', error);
+            }
+        }
+        
+        // Generate SKU
+        function generateSKU() {
+            const categorySelect = document.getElementById('productCategory');
+            const selectedCategory = categories.find(cat => cat.id === categorySelect.value);
+            const categoryCode = selectedCategory ? selectedCategory.name.substring(0, 3).toUpperCase() : 'GEN';
+            const randomNum = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+            document.getElementById('productSKU').value = `BFF-${categoryCode}-${randomNum}`;
+        }
+        
+        // Category form submission
+        document.getElementById('categoryForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('categoryName').value,
+                description: document.getElementById('categoryDescription').value,
+                image: document.getElementById('categoryImage').value
+            };
+            
+            try {
+                const response = await fetch('http://127.0.0.1:3000/api/categories', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showMessage('categoryMessage', '✅ Category added successfully!', 'success');
+                    document.getElementById('categoryForm').reset();
+                    loadCategories();
+                } else {
+                    showMessage('categoryMessage', `❌ Error: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                showMessage('categoryMessage', '❌ Network error. Please try again.', 'error');
+            }
+        });
+        
+        // Product form submission
+        document.getElementById('productForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('productName').value,
+                sku: document.getElementById('productSKU').value,
+                price: parseFloat(document.getElementById('productPrice').value),
+                stock: parseInt(document.getElementById('productStock').value) || 0,
+                categoryId: document.getElementById('productCategory').value,
+                description: document.getElementById('productDescription').value,
+                images: document.getElementById('productImage').value ? [document.getElementById('productImage').value] : [],
+                sizeChart: document.getElementById('productSizes').value ? 
+                    document.getElementById('productSizes').value.split(',').map(s => s.trim()) : [],
+                colors: document.getElementById('productColors').value ? 
+                    document.getElementById('productColors').value.split(',').map(c => c.trim()) : [],
+                isFeatured: document.getElementById('productFeatured').checked,
+                isNewArrival: document.getElementById('productNewArrival').checked
+            };
+            
+            try {
+                const response = await fetch('http://127.0.0.1:3000/api/products', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showMessage('productMessage', '✅ Product added successfully!', 'success');
+                    document.getElementById('productForm').reset();
+                } else {
+                    showMessage('productMessage', `❌ Error: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                showMessage('productMessage', '❌ Network error. Please try again.', 'error');
+            }
+        });
+        
+        // Delete category
+        async function deleteCategory(categoryId) {
+            if (!confirm('Are you sure you want to delete this category?')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`http://127.0.0.1:3000/api/categories/${categoryId}`, {
+                    method: 'DELETE'
+                });
+                
+                if (response.ok) {
+                    loadCategories();
+                } else {
+                    alert('Error deleting category');
+                }
+            } catch (error) {
+                alert('Network error. Please try again.');
+            }
+        }
+        
+        // Show messages
+        function showMessage(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="${type}">${message}</div>`;
+            setTimeout(() => {
+                element.innerHTML = '';
+            }, 5000);
+        }
+        
+        // Initialize
+        showDashboard();
+    </script>
+</body>
+</html>
